@@ -2,11 +2,11 @@ package com.example.comp7082finalproject;
 
 public class Counter {
     private String title;
-    private int counter;
+    private int count;
 
     public Counter(String t, int c){
         this.title=t;
-        this.counter=c;
+        this.count =c;
     }
 
     public String getTitle() {
@@ -16,10 +16,10 @@ public class Counter {
         this.title = title;
     }
 
-    public int getCounter() {
-        return counter;
+    public int getCount() {
+        return count;
     }
-    public void setCounter(int counter) {
-        this.counter = counter;
+    public void setCount(int count) {
+        this.count = count;
     }
 }
