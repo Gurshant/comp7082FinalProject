@@ -12,14 +12,33 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private ArrayList<Counter> counters;
+    private OnItemClickListener mListener;
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView title;
         public TextView count;
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
             count = itemView.findViewById(R.id.count);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener !=null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
     public Adapter(ArrayList<Counter> c){
@@ -29,7 +48,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.counter_item, parent,false);
-        return new ViewHolder(v);
+        return new ViewHolder(v,mListener);
     }
 
     @Override

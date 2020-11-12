@@ -1,10 +1,12 @@
 package com.example.comp7082finalproject;
 
 public class Counter {
+    private int id;
     private String title;
     private int count;
 
-    public Counter(String t, int c){
+    public Counter(int id, String t, int c){
+        this.id = id;
         this.title=t;
         this.count =c;
     }
@@ -21,5 +23,13 @@ public class Counter {
     }
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
