@@ -3,26 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/ListFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.comp7082finalproject.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
+        android:id="@+id/ListFragment"
+        android:name="com.example.comp7082finalproject.ListFragment"
+        android:label="@string/list_fragment_label"
+        tools:layout="@layout/fragment_list">
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="0"
+            />
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_ListFragment_to_ShowFragment"
+            app:destination="@id/ShowFragment" />
+        <action
+            android:id="@+id/action_ListFragment_to_NewFragment"
+            app:destination="@id/NewFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.comp7082finalproject.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/ShowFragment"
+        android:name="com.example.comp7082finalproject.ShowFragment"
+        android:label="@string/show_fragment_label"
+        tools:layout="@layout/fragment_show">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_ShowFragment_to_ListFragment"
+            app:destination="@id/ListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/NewFragment"
+        android:name="com.example.comp7082finalproject.NewFragment"
+        android:label="@string/new_fragment_label"
+        tools:layout="@layout/fragment_new">
+
+        <action
+            android:id="@+id/action_NewFragment_to_ShowFragment"
+            app:destination="@id/ShowFragment" />
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="0"
+            />
     </fragment>
 </navigation>
