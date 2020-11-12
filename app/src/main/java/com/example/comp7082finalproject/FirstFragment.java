@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,6 +25,10 @@ public class FirstFragment extends Fragment {
     ) {
         return inflater.inflate(R.layout.fragment_first, container, false);
     }
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -48,5 +53,30 @@ public class FirstFragment extends Fragment {
         ArrayList<Counter> counters = new ArrayList<>();
         counters.add(new Counter("JP",2));
         counters.add(new Counter("Anand",5));
+        counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5)); counters.add(new Counter("JP",2));
+        counters.add(new Counter("Anand",5));
+        mRecyclerView = view.findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mAdapter = new Adapter(counters);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 }
