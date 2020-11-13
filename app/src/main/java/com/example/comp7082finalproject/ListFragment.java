@@ -31,11 +31,13 @@ public class ListFragment extends Fragment {
     private Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     ArrayList<Counter> counters;
+    DatabaseHelper dbHelper;
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dbHelper = new DatabaseHelper( getActivity());
 
-        createCounters();
+        getCounters();
 
         view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,12 +72,9 @@ public class ListFragment extends Fragment {
         });
 
     }
-    public void createCounters(){
+    public void getCounters(){
         counters = new ArrayList<>();
-        counters.add(new Counter(1,"JP",2));
-        counters.add(new Counter(2,"Anand",5));
-        counters.add(new Counter(3,"sJP",2));
-        counters.add(new Counter(4,"dad",3));
+        counters = dbHelper.indexCounters();
     }
 
 }

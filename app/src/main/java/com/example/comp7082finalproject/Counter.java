@@ -10,7 +10,8 @@ public class Counter {
         this.title=t;
         this.count =c;
     }
-
+    public Counter(){
+    }
     public String getTitle() {
         return title;
     }
