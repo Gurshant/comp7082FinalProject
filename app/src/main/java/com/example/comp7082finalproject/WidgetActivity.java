@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -76,32 +77,25 @@ public class WidgetActivity extends AppCompatActivity {
 
     public void confirmConfiguration(int position) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-
-        Intent intent = new Intent(this, CounterAppWidgetProvider.class);
-        intent.setAction(SUBTRACT);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.counter_widget);
 
         Counter c = counters.get(position);
-        views.setOnClickPendingIntent(R.id.btn_widget_sub, pendingIntent);
+
+        views.setOnClickPendingIntent(R.id.btn_widget_add, getPendingSelfIntent(this, ADD, appWidgetId));
+        views.setOnClickPendingIntent(R.id.btn_widget_sub, getPendingSelfIntent(this, SUBTRACT, appWidgetId));
 
         views.setCharSequence(R.id.textView_widget_count, "setText", c.getCount()+"");
         views.setCharSequence(R.id.textView_widget_title, "setText", c.getTitle());
-
-//        intent.setAction(ADD);
-//        views.setOnClickPendingIntent(R.id.textView_widget_title, pendingIntent);
-        views.setOnClickPendingIntent(R.id.btn_widget_sub, pendingIntent);
-
-
         appWidgetManager.updateAppWidget(appWidgetId, views);
 
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
+
+//        Intent intent = new Intent(this, MainActivity.class);
+//        PendingIntent pi = PendingIntent.getActivity(this,0,intent, 0);
+//        views.setOnClickPendingIntent(R.id.textView_widget_title, pi);
+
         editor.putString(TITLE_TEXT + appWidgetId, c.getTitle());
-        editor.putInt(COUNT_TEXT + appWidgetId, c.getCount());
         editor.putInt(ID_TEXT + appWidgetId, c.getId());
         editor.apply();
 
@@ -109,5 +103,12 @@ public class WidgetActivity extends AppCompatActivity {
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         setResult(RESULT_OK, resultValue);
         finish();
+    }
+    protected  PendingIntent getPendingSelfIntent(Context context, String action, int appWidgetId){
+        Intent intent =  new Intent(context, CounterAppWidgetProvider.class);
+        intent.setAction(action);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        return PendingIntent.getBroadcast(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

@@ -9,9 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
-import static com.example.comp7082finalproject.WidgetActivity.COUNT_TEXT;
 import static com.example.comp7082finalproject.WidgetActivity.ID_TEXT;
 import static com.example.comp7082finalproject.WidgetActivity.TITLE_TEXT;
 import static com.example.comp7082finalproject.NewFragment.SHARED_PREF;
@@ -43,19 +41,14 @@ public class CounterAppWidgetProvider extends AppWidgetProvider {
                 views.setTextViewText(R.id.textView_widget_count,"" + c.getCount());
             }
             String title = prefs.getString(TITLE_TEXT + appWidgetId, "title");
-
-            Intent intent =  new Intent(context, CounterAppWidgetProvider.class);
-
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-
-            intent.setAction(SUBTRACT);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-            views.setOnClickPendingIntent(R.id.btn_widget_sub, pendingIntent);
-//            views.setOnClickPendingIntent(R.id.btn_widget_add, getPendingSelfIntent(context, add));
+            views.setOnClickPendingIntent(R.id.btn_widget_add, getPendingSelfIntent(context, ADD, appWidgetId));
+            views.setOnClickPendingIntent(R.id.btn_widget_sub, getPendingSelfIntent(context, SUBTRACT, appWidgetId));
             views.setCharSequence(R.id.textView_widget_title, "setText", title);
-//            views.setCharSequence(R.id.textView_widget_count, "setText", ""+count);
+
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pi = PendingIntent.getActivity(context,0,intent, 0);
+            views.setOnClickPendingIntent(R.id.textView_widget_title, pi);
+
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
     }
@@ -84,14 +77,29 @@ public class CounterAppWidgetProvider extends AppWidgetProvider {
             }
             Log.d("","subtract");
         }else if(ADD.equals(intent.getAction())){
+            try {
+                dbHelper = new DatabaseHelper(context);
+                c = dbHelper.selectCounter(id);
+                int count = c.getCount();
+
+                if (c != null) {
+                    dbHelper.updateCounter(c.getId(), count+1);
+                    count++;
+                    views.setTextViewText(R.id.textView_widget_count,"" + count);
+                    AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views);
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
             Log.d("","add");
         }
     }
 
-    protected  PendingIntent getPendingSelfIntent(Context context, String action){
-//        Intent intent =  new Intent(context, CounterAppWidgetProvider.class);
-//        intent.setAction(action);
-//        return PendingIntent.getBroadcast(context,0,intent,0);
-        return null;
+    protected  PendingIntent getPendingSelfIntent(Context context, String action, int appWidgetId){
+        Intent intent =  new Intent(context, CounterAppWidgetProvider.class);
+        intent.setAction(action);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+        return PendingIntent.getBroadcast(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }
