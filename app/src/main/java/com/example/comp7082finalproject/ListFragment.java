@@ -64,10 +64,10 @@ public class ListFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Bundle args = new Bundle();
+                counters.get(position).getId();
                 args.putInt("id", counters.get(position).getId());
                 NavHostFragment.findNavController(ListFragment.this).navigate(R.id.action_ListFragment_to_ShowFragment, args);
-//                counters.get(position).setCount(20);
-//                mAdapter.notifyItemChanged(position);
+
             }
         });
 

@@ -1,5 +1,9 @@
 package com.example.comp7082finalproject;
 
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,6 +23,10 @@ import com.google.android.material.snackbar.Snackbar;
 public class NewFragment extends Fragment {
     DatabaseHelper dbHelper;
     EditText et_title;
+
+    public static final String SHARED_PREF = "prefs";
+    private int appWidgetID = AppWidgetManager.INVALID_APPWIDGET_ID;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -41,6 +50,15 @@ public class NewFragment extends Fragment {
                 NavHostFragment.findNavController(NewFragment.this).navigate(R.id.action_NewFragment_to_ShowFragment, args);
             }
         });
+
+        Intent configIntent =getActivity().getIntent();
+        Bundle extras = configIntent.getExtras();
+        if(extras!=null){
+            appWidgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        }
+        Intent resultVal = new Intent();
+        resultVal.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,appWidgetID);
+        getActivity().setResult(getActivity().RESULT_CANCELED,resultVal);
 
     }
 }
