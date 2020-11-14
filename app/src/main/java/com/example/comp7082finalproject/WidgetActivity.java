@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 
@@ -78,6 +79,9 @@ public class WidgetActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, CounterAppWidgetProvider.class);
         intent.setAction(SUBTRACT);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.counter_widget);
 
