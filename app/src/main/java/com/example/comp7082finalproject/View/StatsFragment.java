@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.comp7082finalproject.Presenter.CounterPresenter;
 import com.example.comp7082finalproject.Presenter.DatabaseHelper;
 import com.example.comp7082finalproject.R;
 import com.example.comp7082finalproject.model.Counter;
@@ -33,8 +34,6 @@ public class StatsFragment extends Fragment {
     ) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_stats, container, false);
-
-
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -56,57 +55,16 @@ public class StatsFragment extends Fragment {
 
             if(c!=null){
                 title.setText(c.getTitle());
-
-                Map<String,Number> values = values(list, c);
+                Map<String,Number> values = CounterPresenter.values(list, c);
 
                 count.setText(String.valueOf(values.get("count")));
                 minVal.setText(String.valueOf(values.get("minVal")));
                 maxVal.setText(String.valueOf(values.get("maxVal")));
                 dailyTotal.setText(String.valueOf(values.get("dailyChange")));
-
                 lastUpdated.setText(list.get(list.size()-1).getTime());
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
-    public Map<String,Number> values(ArrayList<CounterChange> list, Counter c){
-        int dailyChange =0;
-        int lastVal;
-        int min=list.get(0).getNewValue();
-        int max=list.get(0).getNewValue();
-        Map<String, Number> values = new HashMap<>();
-
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        String today = sdf.format(new Date());
-        for (int i = 1; i < list.size(); i++) {
-            if(list.get(i).getNewValue() < min){
-                min = list.get(i).getNewValue();
-            }else if(list.get(i).getNewValue() > max){
-                max = list.get(i).getNewValue();
-            }
-            try {
-                String updateCountDate = sdf.format(sdf.parse(list.get(i).getTime()));
-                lastVal = list.get(i - 1).getNewValue();
-                if (today.equals(updateCountDate)) {
-                    int currentVal = list.get(i).getNewValue();
-                    if (currentVal > lastVal) {
-                        dailyChange++;
-                    } else if (currentVal < lastVal) {
-                        dailyChange--;
-                    }
-                }
-            }catch(Exception e){
-                e.printStackTrace();
-                return null;
-            }
-        }
-        values.put("count", c.getCount());
-        values.put("minVal", min);
-        values.put("maxVal", max);
-        values.put("dailyChange", dailyChange);
-        return values;
-    }
-
 }
