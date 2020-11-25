@@ -14,14 +14,16 @@ import com.example.comp7082finalproject.R;
 import com.example.comp7082finalproject.model.Counter;
 import com.example.comp7082finalproject.model.CounterChange;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StatsFragment extends Fragment {
     Counter c;
     TextView title, count, minVal, maxVal, lastUpdated, dailyTotal;
-    ArrayList<CounterChange> list;
 
     DatabaseHelper dbHelper;
     @Override
@@ -44,57 +46,67 @@ public class StatsFragment extends Fragment {
         maxVal = view.findViewById(R.id.textViewMaxVal);
         lastUpdated = view.findViewById(R.id.textViewLastUpdateVal);
         dailyTotal = view.findViewById(R.id.textViewDailyTotalVal);
+
+        ArrayList<CounterChange> list;
+
         try {
             int id = getArguments().getInt("id");
             c =dbHelper.selectCounter(id);
-            list = new ArrayList<>();
             list = dbHelper.indexChanges(id);
-            int dailyChange =0;
 
-            if(c==null){
-                title.setText("ERROR");
-                lastUpdated.setText("N/A");
-
-            }else {
-                count.setText(String.valueOf(c.getCount()));
+            if(c!=null){
                 title.setText(c.getTitle());
 
-                int min =list.get(0).getNewValue();
-                int max =list.get(0).getNewValue();
-                int lastVal;
+                Map<String,Number> values = values(list, c);
 
-                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-                String today = sdf.format(new Date());
+                count.setText(String.valueOf(values.get("count")));
+                minVal.setText(String.valueOf(values.get("minVal")));
+                maxVal.setText(String.valueOf(values.get("maxVal")));
+                dailyTotal.setText(String.valueOf(values.get("dailyChange")));
 
-                for (int i = 1; i < list.size(); i++) {
-                    if(list.get(i).getNewValue() < min){
-                        min = list.get(i).getNewValue();
-                    }else if(list.get(i).getNewValue() > max){
-                        max = list.get(i).getNewValue();
-                    }
-
-                    String updateCountDate =sdf.format(sdf.parse(list.get(i).getTime()));
-                    lastVal = list.get(i-1).getNewValue();
-                    if(today.equals(updateCountDate) ){
-                        int currentVal= list.get(i).getNewValue();
-                        int a=0;
-                        if( currentVal> lastVal){
-                            dailyChange++;
-                        }else if(currentVal < lastVal){
-                            dailyChange--;
-                        }
-                    }
-                }
-
-                minVal.setText(String.valueOf(min));
-                maxVal.setText(String.valueOf(max));
-                dailyTotal.setText(String.valueOf(dailyChange));
                 lastUpdated.setText(list.get(list.size()-1).getTime());
-
             }
         }catch (Exception e){
             e.printStackTrace();
         }
 
     }
+    public Map<String,Number> values(ArrayList<CounterChange> list, Counter c){
+        int dailyChange =0;
+        int lastVal;
+        int min=list.get(0).getNewValue();
+        int max=list.get(0).getNewValue();
+        Map<String, Number> values = new HashMap<>();
+
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf.format(new Date());
+        for (int i = 1; i < list.size(); i++) {
+            if(list.get(i).getNewValue() < min){
+                min = list.get(i).getNewValue();
+            }else if(list.get(i).getNewValue() > max){
+                max = list.get(i).getNewValue();
+            }
+            try {
+                String updateCountDate = sdf.format(sdf.parse(list.get(i).getTime()));
+                lastVal = list.get(i - 1).getNewValue();
+                if (today.equals(updateCountDate)) {
+                    int currentVal = list.get(i).getNewValue();
+                    if (currentVal > lastVal) {
+                        dailyChange++;
+                    } else if (currentVal < lastVal) {
+                        dailyChange--;
+                    }
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        }
+        values.put("count", c.getCount());
+        values.put("minVal", min);
+        values.put("maxVal", max);
+        values.put("dailyChange", dailyChange);
+        return values;
+    }
+
 }

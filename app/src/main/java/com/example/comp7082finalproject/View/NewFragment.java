@@ -44,8 +44,6 @@ public class NewFragment extends Fragment {
                 int id =dbHelper.createCounter(et_title.getText().toString());
                 args.putInt("id", id);
                 dbHelper.createChange(id, 0);
-
-
                 NavHostFragment.findNavController(NewFragment.this).navigate(R.id.action_NewFragment_to_ShowFragment, args);
             }
         });

@@ -51,7 +51,6 @@ public class ShowFragment extends Fragment {
             c =dbHelper.selectCounter(id);
             if(c==null){
                 count.setText("-1");
-
             }else {
                 count.setText(String.valueOf(c.getCount()));
                 title.setText(c.getTitle());
@@ -87,9 +86,9 @@ public class ShowFragment extends Fragment {
         });
 
     }
+
     public void updateView(){
         dbHelper.updateCounter(c.getId(),c.getCount());
-
         dbHelper.createChange(c.getId(), c.getCount());
         String finalCount= ""+c.getCount();
         count.setText(finalCount);
