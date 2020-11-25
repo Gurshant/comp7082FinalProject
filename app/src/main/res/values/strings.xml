@@ -5,9 +5,24 @@
     <string name="list_fragment_label">List Fragment</string>
     <string name="show_fragment_label">Show Fragment</string>
     <string name="new_fragment_label">New Fragment</string>
+    <string name="stats_fragment_label">Stats Fragment</string>
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="stats">Statistics</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
+    <string name="minVal">Minimum Value</string>
+    <string name="maxVal">Maximum Value</string>
+    <string name="titleExample">Ex: Squats</string>
+    <string name="dailyTotal">Daily Total</string>
+    <string name="lastUpdate">Last Updated</string>
+    <string name="listCounterDescription">List of Counters</string>
+
+
+    <string name="subtract">-</string>
+    <string name="add">+</string>
+    <string name="nullVal">0</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>

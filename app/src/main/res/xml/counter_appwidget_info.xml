@@ -7,7 +7,7 @@
     android:minResizeHeight="110dp"
     android:resizeMode="vertical|horizontal"
     android:widgetCategory="home_screen"
-    android:configure="com.example.comp7082finalproject.WidgetActivity"
+    android:configure="com.example.comp7082finalproject.View.WidgetActivity"
     >
 
 </appwidget-provider>

@@ -1,4 +1,4 @@
-package com.example.comp7082finalproject;
+package com.example.comp7082finalproject.View;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,13 +7,15 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.comp7082finalproject.Presenter.Adapter;
+import com.example.comp7082finalproject.Presenter.DatabaseHelper;
+import com.example.comp7082finalproject.R;
+import com.example.comp7082finalproject.model.Counter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -64,7 +66,6 @@ public class ListFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Bundle args = new Bundle();
-                counters.get(position).getId();
                 args.putInt("id", counters.get(position).getId());
                 NavHostFragment.findNavController(ListFragment.this).navigate(R.id.action_ListFragment_to_ShowFragment, args);
 

@@ -1,4 +1,4 @@
-package com.example.comp7082finalproject;
+package com.example.comp7082finalproject.Presenter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.comp7082finalproject.R;
+import com.example.comp7082finalproject.model.Counter;
 
 import java.util.ArrayList;
 
