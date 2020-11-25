@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/ListFragment"
-        android:name="com.example.comp7082finalproject.ListFragment"
+        android:name="com.example.comp7082finalproject.View.ListFragment"
         android:label="@string/list_fragment_label"
         tools:layout="@layout/fragment_list">
         <argument
@@ -22,19 +22,34 @@
             android:id="@+id/action_ListFragment_to_NewFragment"
             app:destination="@id/NewFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/StatsFragment"
+        android:name="com.example.comp7082finalproject.View.StatsFragment"
+        android:label="@string/stats_fragment_label"
+        tools:layout="@layout/fragment_stats">
+    </fragment>
+
     <fragment
         android:id="@+id/ShowFragment"
-        android:name="com.example.comp7082finalproject.ShowFragment"
+        android:name="com.example.comp7082finalproject.View.ShowFragment"
         android:label="@string/show_fragment_label"
         tools:layout="@layout/fragment_show">
-
+        <argument
+            android:name="id"
+            app:argType="integer"
+            android:defaultValue="0"
+            />
         <action
             android:id="@+id/action_ShowFragment_to_ListFragment"
             app:destination="@id/ListFragment" />
+        <action
+            android:id="@+id/action_ShowFragment_to_StatsFragment"
+            app:destination="@id/StatsFragment" />
     </fragment>
     <fragment
         android:id="@+id/NewFragment"
-        android:name="com.example.comp7082finalproject.NewFragment"
+        android:name="com.example.comp7082finalproject.View.NewFragment"
         android:label="@string/new_fragment_label"
         tools:layout="@layout/fragment_new">
 

@@ -1,4 +1,4 @@
-package com.example.comp7082finalproject;
+package com.example.comp7082finalproject.model;
 
 public class Counter {
     private int id;

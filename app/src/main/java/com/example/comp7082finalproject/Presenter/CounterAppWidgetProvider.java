@@ -1,4 +1,4 @@
-package com.example.comp7082finalproject;
+package com.example.comp7082finalproject.Presenter;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -10,9 +10,13 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import static com.example.comp7082finalproject.WidgetActivity.ID_TEXT;
-import static com.example.comp7082finalproject.WidgetActivity.TITLE_TEXT;
-import static com.example.comp7082finalproject.NewFragment.SHARED_PREF;
+import com.example.comp7082finalproject.R;
+import com.example.comp7082finalproject.View.MainActivity;
+import com.example.comp7082finalproject.model.Counter;
+
+import static com.example.comp7082finalproject.View.WidgetActivity.ID_TEXT;
+import static com.example.comp7082finalproject.View.WidgetActivity.TITLE_TEXT;
+import static com.example.comp7082finalproject.View.NewFragment.SHARED_PREF;
 
 public class CounterAppWidgetProvider extends AppWidgetProvider {
     DatabaseHelper dbHelper;
@@ -26,8 +30,8 @@ public class CounterAppWidgetProvider extends AppWidgetProvider {
 
         for(int appWidgetId: appWidgetIds){
 
-            RemoteViews views  = new RemoteViews(context.getPackageName(),R.layout.counter_widget);
-            SharedPreferences prefs = context.getSharedPreferences(SHARED_PREF,context.MODE_PRIVATE);
+            RemoteViews views  = new RemoteViews(context.getPackageName(), R.layout.counter_widget);
+            SharedPreferences prefs = context.getSharedPreferences(SHARED_PREF,Context.MODE_PRIVATE);
 
             int id =prefs.getInt(ID_TEXT +appWidgetId, 0);
 
@@ -56,7 +60,7 @@ public class CounterAppWidgetProvider extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent){
         super.onReceive(context,intent);
         RemoteViews views  = new RemoteViews(context.getPackageName(),R.layout.counter_widget);
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREF,context.MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREF,Context.MODE_PRIVATE);
         int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         int id =prefs.getInt(ID_TEXT +appWidgetId, 0);
 
@@ -64,13 +68,9 @@ public class CounterAppWidgetProvider extends AppWidgetProvider {
             try {
                 dbHelper = new DatabaseHelper(context);
                 c = dbHelper.selectCounter(id);
-                int count = c.getCount();
-
                 if (c != null) {
-                    dbHelper.updateCounter(c.getId(), count-1);
-                    count--;
-                    views.setTextViewText(R.id.textView_widget_count,"" + count);
-                    AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views);
+                    c.setCount(c.getCount()-1);
+                    updateCount(context, views,appWidgetId );
                 }
             }catch(Exception e){
                 e.printStackTrace();
@@ -80,13 +80,9 @@ public class CounterAppWidgetProvider extends AppWidgetProvider {
             try {
                 dbHelper = new DatabaseHelper(context);
                 c = dbHelper.selectCounter(id);
-                int count = c.getCount();
-
                 if (c != null) {
-                    dbHelper.updateCounter(c.getId(), count+1);
-                    count++;
-                    views.setTextViewText(R.id.textView_widget_count,"" + count);
-                    AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views);
+                    c.setCount(c.getCount()+1);
+                    updateCount(context,views,appWidgetId);
                 }
             }catch(Exception e){
                 e.printStackTrace();
@@ -101,5 +97,11 @@ public class CounterAppWidgetProvider extends AppWidgetProvider {
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
         return PendingIntent.getBroadcast(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+    private void updateCount(Context context, RemoteViews views,  int appWidgetId) {
+        dbHelper.updateCounter(c.getId(), c.getCount());
+        dbHelper.createChange(c.getId(), c.getCount());
+        views.setTextViewText(R.id.textView_widget_count, "" + c.getCount());
+        AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, views);
     }
 }

@@ -1,9 +1,7 @@
-package com.example.comp7082finalproject;
+package com.example.comp7082finalproject.View;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,11 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RemoteViews;
-import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.comp7082finalproject.Presenter.DatabaseHelper;
+import com.example.comp7082finalproject.R;
 
 public class NewFragment extends Fragment {
     DatabaseHelper dbHelper;
@@ -47,6 +43,9 @@ public class NewFragment extends Fragment {
                 Bundle args = new Bundle();
                 int id =dbHelper.createCounter(et_title.getText().toString());
                 args.putInt("id", id);
+                dbHelper.createChange(id, 0);
+
+
                 NavHostFragment.findNavController(NewFragment.this).navigate(R.id.action_NewFragment_to_ShowFragment, args);
             }
         });

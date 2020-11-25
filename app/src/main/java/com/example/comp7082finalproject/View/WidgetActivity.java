@@ -1,4 +1,4 @@
-package com.example.comp7082finalproject;
+package com.example.comp7082finalproject.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,10 +13,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 
+import com.example.comp7082finalproject.Presenter.Adapter;
+import com.example.comp7082finalproject.Presenter.CounterAppWidgetProvider;
+import com.example.comp7082finalproject.Presenter.DatabaseHelper;
+import com.example.comp7082finalproject.R;
+import com.example.comp7082finalproject.model.Counter;
+
 import java.util.ArrayList;
 
-import static com.example.comp7082finalproject.CounterAppWidgetProvider.ADD;
-import static com.example.comp7082finalproject.CounterAppWidgetProvider.SUBTRACT;
+import static com.example.comp7082finalproject.Presenter.CounterAppWidgetProvider.ADD;
+import static com.example.comp7082finalproject.Presenter.CounterAppWidgetProvider.SUBTRACT;
 
 public class WidgetActivity extends AppCompatActivity {
     ArrayList<Counter> counters;
