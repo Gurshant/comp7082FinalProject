@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.example.comp7082finalproject.Presenter.CounterAppWidgetProvider.ADD;
@@ -39,8 +40,7 @@ public class CounterPresenter {
         int min=list.get(0).getNewValue();
         int max=list.get(0).getNewValue();
         Map<String, Number> values = new HashMap<>();
-
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String today = sdf.format(new Date());
         for (int i = 1; i < list.size(); i++) {
             if(list.get(i).getNewValue() < min){
@@ -73,8 +73,21 @@ public class CounterPresenter {
 
 
     public static ArrayList<Counter> getCounters( DatabaseHelper dbHelper){
-        ArrayList<Counter> counters = dbHelper.indexCounters();
-        return counters;
+        try {
+            return dbHelper.indexCounters();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Counter getCounter( DatabaseHelper dbHelper, int id){
+        try {
+            return dbHelper.selectCounter(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static PendingIntent getPendingSelfIntent(Context context, String action, int appWidgetId){

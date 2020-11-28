@@ -44,23 +44,19 @@ public class ShowFragment extends Fragment {
 
         TextView title = view.findViewById(R.id.textView_title);
         count = view.findViewById(R.id.textView_count);
-
         try {
-            int id = getArguments().getInt("id");
-            c =dbHelper.selectCounter(id);
-            if(c==null){
-                count.setText("-1");
-            }else {
-                count.setText(String.valueOf(c.getCount()));
-                title.setText(c.getTitle());
-            }
+            c = CounterPresenter.getCounter(dbHelper, getArguments().getInt("id"));
         }catch (Exception e){
             e.printStackTrace();
         }
-        Button btnSub = view.findViewById(R.id.button_subtract);
-        Button btnAdd = view.findViewById(R.id.button_add);
+        if(c==null){
+            count.setText("-1");
+        }else {
+            count.setText(String.valueOf(c.getCount()));
+            title.setText(c.getTitle());
+        }
 
-        btnSub.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.button_subtract).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -68,7 +64,7 @@ public class ShowFragment extends Fragment {
                 count.setText(String.valueOf( CounterPresenter.currentCountAfterUpdate(c, dbHelper) ) );
             }
         });
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 c.setCount(c.getCount()+1);

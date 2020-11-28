@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.comp7082finalproject.Presenter.Adapter;
+import com.example.comp7082finalproject.Presenter.CounterPresenter;
 import com.example.comp7082finalproject.Presenter.DatabaseHelper;
 import com.example.comp7082finalproject.R;
 import com.example.comp7082finalproject.model.Counter;
@@ -29,17 +30,13 @@ public class ListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
-    private RecyclerView mRecyclerView;
-    private Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     ArrayList<Counter> counters;
-    DatabaseHelper dbHelper;
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        dbHelper = new DatabaseHelper( getActivity());
+        DatabaseHelper dbHelper = new DatabaseHelper( getActivity());
 
-        getCounters();
+        counters = CounterPresenter.getCounters(dbHelper);
 
         view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,10 +53,10 @@ public class ListFragment extends Fragment {
             }
         });
 
-        mRecyclerView = view.findViewById(R.id.recyclerView);
+        RecyclerView  mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mAdapter = new Adapter(counters);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        Adapter mAdapter  = new Adapter(counters);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
@@ -72,10 +69,6 @@ public class ListFragment extends Fragment {
             }
         });
 
-    }
-    public void getCounters(){
-        counters = new ArrayList<>();
-        counters = dbHelper.indexCounters();
     }
 
 }
