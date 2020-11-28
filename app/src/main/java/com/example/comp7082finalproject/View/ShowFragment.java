@@ -11,15 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.comp7082finalproject.Presenter.CounterPresenter;
 import com.example.comp7082finalproject.Presenter.DatabaseHelper;
 import com.example.comp7082finalproject.R;
 import com.example.comp7082finalproject.model.Counter;
 
 public class ShowFragment extends Fragment {
-    Button btnSub, btnAdd;
-    TextView title, count;
-    DatabaseHelper dbHelper;
+
     Counter c;
+    TextView count;
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -32,8 +33,7 @@ public class ShowFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        dbHelper = new DatabaseHelper( getActivity());
-
+        final DatabaseHelper dbHelper = new DatabaseHelper( getActivity());
         view.findViewById(R.id.button_previous).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,37 +42,33 @@ public class ShowFragment extends Fragment {
             }
         });
 
-
-        title = view.findViewById(R.id.textView_title);
+        TextView title = view.findViewById(R.id.textView_title);
         count = view.findViewById(R.id.textView_count);
-
         try {
-            int id = getArguments().getInt("id");
-            c =dbHelper.selectCounter(id);
-            if(c==null){
-                count.setText("-1");
-            }else {
-                count.setText(String.valueOf(c.getCount()));
-                title.setText(c.getTitle());
-            }
+            c = CounterPresenter.getCounter(dbHelper, getArguments().getInt("id"));
         }catch (Exception e){
             e.printStackTrace();
         }
-        btnSub = view.findViewById(R.id.button_subtract);
-        btnAdd = view.findViewById(R.id.button_add);
+        if(c==null){
+            count.setText("-1");
+        }else {
+            count.setText(String.valueOf(c.getCount()));
+            title.setText(c.getTitle());
+        }
 
-        btnSub.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.button_subtract).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 c.setCount(c.getCount()-1);
-                updateView();
+                count.setText(String.valueOf( CounterPresenter.currentCountAfterUpdate(c, dbHelper) ) );
             }
         });
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 c.setCount(c.getCount()+1);
-                updateView();
+                count.setText(String.valueOf( CounterPresenter.currentCountAfterUpdate(c, dbHelper) ) );
             }
         });
         view.findViewById(R.id.button_stats).setOnClickListener(new View.OnClickListener() {
@@ -87,10 +83,5 @@ public class ShowFragment extends Fragment {
 
     }
 
-    public void updateView(){
-        dbHelper.updateCounter(c.getId(),c.getCount());
-        dbHelper.createChange(c.getId(), c.getCount());
-        String finalCount= ""+c.getCount();
-        count.setText(finalCount);
-    }
+
 }
